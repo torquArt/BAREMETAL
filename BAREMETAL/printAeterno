@@ -1,0 +1,27 @@
+#include <avr/io.h> 
+#define FOSC 16000000 //CLOCK SPEED
+#define BAUD 9600
+#define MYUBRR FOSC/16/BAUD-1
+
+int main (){
+  //CONFIGURANDO A VELOCIDADE
+  UBRR0H = (MYUBRR >> 8);
+  UBRR0L = 0x00FF & MYUBRR;
+
+//HABILITANDO RX E TX
+  UCSR0B = (1<<RXEN0)|(1<<TXEN0); 
+
+  //CONFIGURANDO O TAMANHO DE BITS 8
+   UCSR0C = UCSR0C | (1 << UCSZ00) | (1 << UCSZ01); 
+
+  
+
+  while(1){
+
+    //Wait for empty transmit buffer 
+    while (!(UCSR0A & (1<<UDRE0)));
+    // Put data into buffer, sends the data 
+    UDR0 = 'a';
+
+    }
+  }
